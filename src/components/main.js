@@ -1,7 +1,10 @@
 import React from 'react';
 import ImageSelect from './imageSelect';
 import EventDescription from './eventDescription';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, 
+         Image, 
+         StyleSheet, 
+         View } from 'react-native';
 
 export default class Main extends React.Component {
   state = {
@@ -17,11 +20,12 @@ export default class Main extends React.Component {
     } else {
       renderResult = <ImageSelect imageHandler={this._handleImagePicked}/>;
     }
-    return (<ActivityIndicator
-        animating={true}
-        style={{height: 80}}
-        size="large"
-      />);
+    return (
+      <View style={styles.container}>
+        <Image source={require('../../assets/imgs/background.jpg')} style={styles.background} />
+        {renderResult}
+      </View>
+    );
   }
 
   _handleImagePicked = async (pickerResult) => {
@@ -48,7 +52,25 @@ export default class Main extends React.Component {
     }
   }
 }
+
 async function uploadImageAsync(uri) {
   return true;
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%'
+  },
+  background: {
+    position: 'absolute',
+    left: 0,
+    top: 0
+  }
+});
+
 

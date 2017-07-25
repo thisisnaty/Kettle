@@ -10,7 +10,7 @@ export default class ImageSelect extends React.Component {
   }
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         <TouchableOpacity
           onPress={this._takePhoto} 
           style={styles.circle}>
@@ -45,23 +45,15 @@ export default class ImageSelect extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    width: '100%',
-    height: '100%',
-  },
   circle: {
-    width: 116,
-    height: 116,
-    borderRadius: 58,
-    backgroundColor: 'red',
+    width: 118,
+    height: 118,
+    borderRadius: 59,
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 20
+    margin: 20,
+    borderWidth: 3,
+    borderColor: 'white'
   }
 });
 
