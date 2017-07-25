@@ -1,8 +1,8 @@
 {
   "name": "kettle",
-  "version": "0.0.0",
-  "description": "Hello Expo!",
-  "author": null,
+  "version": "0.0.1",
+  "description": "Import an image directly to your calendar.",
+  "author": "thisisnaty",
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "dependencies": {

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "kettle",
-    "description": "An empty new project",
+    "description": "Import an image directly to your calendar",
     "slug": "kettle",
     "privacy": "public",
     "sdkVersion": "19.0.0",
