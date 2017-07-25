@@ -1,34 +1,43 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import { ImagePicker } from 'expo';
+import { EvilIcons } from '@expo/vector-icons';
 
 export default class App extends React.Component {
   state = {
     image: null,
     uploading: false,
   }
-  _handlePress() {
-    console.log('Button pressed');
-  }
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Button 
-          onPress={this._takePhoto}
-          title="Take Photo"/>
+        <TouchableOpacity
+          onPress={this._takePhoto} style={styles.circle}>
+          <EvilIcons name="camera" size={86} color="white"/>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={this._selectPhoto} style={styles.circle}>
+          <EvilIcons name="image" size={86} color="white"/>
+        </TouchableOpacity>
       </View>
-    );
+    );   
   }
 
   _takePhoto = async () => {
-  let pickerResult = await ImagePicker.launchCameraAsync({
-    allowsEditing: true,
-    aspect: [4,3]
-  });
+    let pickerResult = await ImagePicker.launchCameraAsync({
+      allowsEditing: false,
+      aspect: [4,3]
+    });
 
-  this._handleImagePicked(pickerResult);
-}
+    this._handleImagePicked(pickerResult);
+  }
+
+  _selectPhoto = async () => {
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false,
+      aspect: [4,3]
+    })
+  }
 
 
 _handleImagePicked = async (pickerResult) => {
@@ -62,5 +71,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    height: '100%',
   },
+  circle: {
+    width: 116,
+    height: 116,
+    borderRadius: 58,
+    backgroundColor: 'red',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 20
+  }
 });
