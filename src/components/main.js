@@ -77,8 +77,7 @@ async function uploadImageAsync(uri) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'red',
-    
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
