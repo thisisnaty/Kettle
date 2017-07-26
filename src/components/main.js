@@ -4,10 +4,11 @@ import EventDescription from './eventDescription';
 import { ActivityIndicator, 
          Image, 
          StyleSheet, 
-         View } from 'react-native';
-import {
-    LinearGradient
-} from 'expo';
+         View,
+         Linking } from 'react-native';
+import { LinearGradient, FileSystem } from 'expo';
+import { uploadImageAsync } from '../helpers/imageUploader'; 
+import { parseJsonToIcs } from '../helpers/icsParser';
 
 export default class Main extends React.Component {
   state = {
@@ -19,10 +20,12 @@ export default class Main extends React.Component {
     let renderResult = null;
     let renderBackground = null;
 
-    if (this.state.uploaded) {
-      renderResult = <EventDescription imageUri={this.state.imageUri} startAgain={this._startAgain.bind(this)} />;
-    } else {
-      renderResult = <ImageSelect imageHandler={this._handleImagePicked.bind(this)}/>;
+    if (!this.state.uploading) {
+      if (this.state.uploaded) {
+        renderResult = <EventDescription imageUri={this.state.imageUri} startAgain={this._startAgain.bind(this)} />;
+      } else {
+        renderResult = <ImageSelect imageHandler={this._handleImagePicked.bind(this)}/>;
+      }
     }
 
     return (
@@ -44,11 +47,13 @@ export default class Main extends React.Component {
 
       if(!pickerResult.cancelled) {
         this.setState({imageUri: pickerResult.uri, uploaded: true });
-        /**
-         * uploadResponse = await uploadImageAsync(pickerResult.uri);
-         * uploadResult = await uploadResponse.json();
-         * this.setState({image: uploadResult.location});
-        **/
+        
+        uploadImageAsync(pickerResult.uri).then((uploadResponse) => {
+          return uploadResponse.json();
+        }).then((jsonResponse) => {
+          this.setState({uploading: false});
+          return this._manageEventAsync(jsonResponse);
+        });
       }
     } catch(e) {
       console.log({uploadResponse});
@@ -68,10 +73,24 @@ export default class Main extends React.Component {
       uploaded: false
     });
   }
-}
 
-async function uploadImageAsync(uri) {
-  return true;
+  _manageEventAsync = async (json) => {
+    //console.log(json);
+    
+    var path = FileSystem.documentDirectory + '/' + 
+      json.Name.split(" ").join("-") + 
+      Math.random().toString(36).substr(2, 3) + '.ics';
+    
+    return FileSystem.writeAsStringAsync(path, parseJsonToIcs(json))
+      .then(() => {
+        //Linking.openURL('ical://' + path);
+        //console.log(path);
+      })
+      .catch((err) => {
+        console.log("Error on creating ics");
+        console.log(err);
+      });
+  }
 }
 
 const styles = StyleSheet.create({
