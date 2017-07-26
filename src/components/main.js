@@ -5,6 +5,9 @@ import { ActivityIndicator,
          Image, 
          StyleSheet, 
          View } from 'react-native';
+import {
+    LinearGradient
+} from 'expo';
 
 export default class Main extends React.Component {
   state = {
@@ -14,16 +17,23 @@ export default class Main extends React.Component {
   }
   render() {
     let renderResult = null;
+    let renderBackground = null;
 
     if (this.state.uploaded) {
-      renderResult = <EventDescription imageUri={this.state.imageUri} />
+      //renderBackground = null;
+      renderResult = <EventDescription imageUri={this.state.imageUri} />;
     } else {
+      //renderBackground = <Image source={require('../../assets/imgs/background.jpg')} style={styles.background} />;
       renderResult = <ImageSelect imageHandler={this._handleImagePicked}/>;
     }
+
     return (
       <View style={styles.container}>
-        <Image source={require('../../assets/imgs/background.jpg')} style={styles.background} />
+        <LinearGradient
+          colors={["rgb(30,87,153)", "rgb(32,124,202)", "rgb(125,185,232)"]}
+          style={styles.container}>
         {renderResult}
+        </LinearGradient>
       </View>
     );
   }
@@ -32,10 +42,9 @@ export default class Main extends React.Component {
     this.setState({imageUri: pickerResult.uri});
 
     let uploadResponse, uploadResult;
-
+    
     try {
       this.setState({uploading: true});
-
       /**if(!pickerResult.cancelled) {
         uploadResponse = await uploadImageAsync(pickerResult.uri);
         uploadResult = await uploadResponse.json();
@@ -49,6 +58,7 @@ export default class Main extends React.Component {
       alert('Upload failed');**/
     } finally {
       this.setState({uploading: false, uploaded: true});
+      //saveEventFromJson(json);
     }
   }
 }
