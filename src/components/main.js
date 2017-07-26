@@ -20,11 +20,9 @@ export default class Main extends React.Component {
     let renderBackground = null;
 
     if (this.state.uploaded) {
-      //renderBackground = null;
-      renderResult = <EventDescription imageUri={this.state.imageUri} />;
+      renderResult = <EventDescription imageUri={this.state.imageUri} startAgain={this._startAgain.bind(this)} />;
     } else {
-      //renderBackground = <Image source={require('../../assets/imgs/background.jpg')} style={styles.background} />;
-      renderResult = <ImageSelect imageHandler={this._handleImagePicked}/>;
+      renderResult = <ImageSelect imageHandler={this._handleImagePicked.bind(this)}/>;
     }
 
     return (
@@ -39,27 +37,36 @@ export default class Main extends React.Component {
   }
 
   _handleImagePicked = async (pickerResult) => {
-    this.setState({imageUri: pickerResult.uri});
-
     let uploadResponse, uploadResult;
     
     try {
       this.setState({uploading: true});
-      /**if(!pickerResult.cancelled) {
-        uploadResponse = await uploadImageAsync(pickerResult.uri);
-        uploadResult = await uploadResponse.json();
-        this.setState({image: uploadResult.location});
+
+      if(!pickerResult.cancelled) {
+        this.setState({imageUri: pickerResult.uri, uploaded: true });
+        /**
+         * uploadResponse = await uploadImageAsync(pickerResult.uri);
+         * uploadResult = await uploadResponse.json();
+         * this.setState({image: uploadResult.location});
+        **/
       }
-      **/
     } catch(e) {
-      /**console.log({uploadResponse});
+      console.log({uploadResponse});
       console.log({uploadResult});
       console.log({e});
-      alert('Upload failed');**/
+      this.setState({imageUri: null, uploaded: false});
+      alert("There was an error, please try again.")
     } finally {
-      this.setState({uploading: false, uploaded: true});
-      //saveEventFromJson(json);
+      this.setState({uploading: false});
     }
+  }
+
+  _startAgain = () => {
+    this.setState({
+      imageUri: null,
+      uploading: false,
+      uploaded: false
+    });
   }
 }
 
@@ -70,7 +77,8 @@ async function uploadImageAsync(uri) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'red',
+    
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',

@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
-
+import { View, Image, StyleSheet, Button } from 'react-native';
 
 export default class EventDescription extends React.Component {
   render() {
@@ -9,6 +8,9 @@ export default class EventDescription extends React.Component {
         <Image 
           style={styles.image} 
           source={{uri: this.props.imageUri}} />
+        <Button 
+          onPress={this.props.startAgain}
+          title="Start Again"/>
       </View>
     );
   }
@@ -17,7 +19,9 @@ export default class EventDescription extends React.Component {
 const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    width: '100%',
+    height: '100%'
   },
   image: {
     flex: 1
