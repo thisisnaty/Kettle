@@ -20,7 +20,7 @@ export default class Main extends React.Component {
     uploaded: false,
     isLogin: false,
     name: null,
-    access_token: null
+    accessToken: null
   }
   render() {
     let renderResult = null;
@@ -85,27 +85,18 @@ export default class Main extends React.Component {
   }
 
   _manageEventAsync = async (json) => {
-    console.log(json);
-
-    let formData = new FormData();
-    formData.append('subject', `${json.title} @ ${json.location}`);
-    formData.append('start', {
-      "dateTime": json.startDate,
-      "timeZone": "PT"
-    });
-    formData.append('end', {
-      "dateTime": json.endDate,
-      "timeZone": "PT"
-    });
-    formData.append('isAllDay', json.isAllDay);
-
-    return fetch(`https://graph.microsoft.com/beta/me/calendar/events`, {
+    return fetch(`https://graph.microsoft.com/v1.0/me/events`, {
       method: "POST",
       headers: {
-        'Authorization': `Bearer ${this.state.access_token}`,
+        'Authorization': `Bearer ${this.state.accessToken}`,
         'Content-Type': 'application/json'
       },
-      body: formData
+      body: JSON.stringify({
+        subject: `${json.title} @ ${json.location}`,
+        start: {dateTime: json.startDate, timeZone: "UTC"},
+        end: {dateTime: json.endDate, timeZone: "UTC"},
+        isAllDay: json.isAllDay
+      })
     });
   }
 }

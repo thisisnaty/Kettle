@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+	View,
+	Text,
 	StyleSheet,
 	TouchableOpacity,
 	Linking,
@@ -13,11 +15,17 @@ export default class Authentication extends React.Component {
 	}
 	render() {
 		return (
+			<View style={styles.container}>
+			<Text
+              style={styles.title}>
+              Login
+            </Text>
 			<TouchableOpacity
 				onPress={loginToMicrosoft}
 				style={styles.circle}>
 				<SimpleLineIcons name="login" size={40} color="white" />
 			</TouchableOpacity>
+			</View>
 		);
 	}
 	
@@ -27,6 +35,9 @@ export default class Authentication extends React.Component {
 }
 
 const styles = StyleSheet.create({
+	container: {
+		alignItems: 'center'
+	},
 	circle: {
 		width: 118,
 		height: 118,
@@ -36,5 +47,11 @@ const styles = StyleSheet.create({
 		margin: 20,
 		borderWidth: 3,
 		borderColor: 'white'
+	},
+	title: {
+		fontSize: 25,
+		color: 'white',
+		marginBottom: 30,
+		justifyContent: 'center'
 	}
 });

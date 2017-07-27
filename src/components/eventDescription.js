@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, Button, TouchableOpacity, Text } from 'react-native';
 import { BlurView } from 'expo';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -15,9 +15,16 @@ export default class EventDescription extends React.Component {
         </BlurView>
         <View style={styles.fullscreenView}>
           <TouchableOpacity
-            onPress={this.props.startAgain} 
+            onPress={this.props.startAgain}
+            style={styles.touchable}>
+            <Text
+              style={styles.title}>
+              Success!
+            </Text>
+          <View
             style={styles.circle}>
               <MaterialIcons name="check" size={40} color="white"/>
+          </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -26,6 +33,9 @@ export default class EventDescription extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  touchable: {
+    alignItems: 'center'
+  },
   container: {
     flex: 1
   },
@@ -57,6 +67,11 @@ const styles = StyleSheet.create({
     height: '100%',
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center'
+  },
+  title: {
+    fontSize: 25,
+    color: 'white',
     justifyContent: 'center'
   }
 });
