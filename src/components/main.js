@@ -87,15 +87,18 @@ export default class Main extends React.Component {
   _manageEventAsync = async (json) => {
     console.log(json);
 
+    const start = json.startDate.substring(0, json.startDate.length - 1);
+    const end = json.endDate.substring(0, json.endDate.length - 1);
+
     let formData = new FormData();
     formData.append('subject', `${json.title} @ ${json.location}`);
     formData.append('start', {
-      "dateTime": json.startDate,
-      "timeZone": "PT"
+      "dateTime": start,
+      "timeZone": "Pacific Standard Time"
     });
     formData.append('end', {
-      "dateTime": json.endDate,
-      "timeZone": "PT"
+      "dateTime": end,
+      "timeZone": "Pacific Standard Time"
     });
     formData.append('isAllDay', json.isAllDay);
 
