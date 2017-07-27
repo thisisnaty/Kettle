@@ -85,6 +85,8 @@ export default class Main extends React.Component {
   }
 
   _manageEventAsync = async (json) => {
+    const start = json.startDate.substring(0, json.startDate.length - 1);
+    const end = json.endDate.substring(0, json.endDate.length - 1);
     return fetch(`https://graph.microsoft.com/v1.0/me/events`, {
       method: "POST",
       headers: {
@@ -93,8 +95,8 @@ export default class Main extends React.Component {
       },
       body: JSON.stringify({
         subject: `${json.title} @ ${json.location}`,
-        start: {dateTime: json.startDate, timeZone: "UTC"},
-        end: {dateTime: json.endDate, timeZone: "UTC"},
+        start: {dateTime: start, timeZone: "Pacific Standard Time"},
+        end: {dateTime: end, timeZone: "Pacific Standard Time"},
         isAllDay: json.isAllDay
       })
     });
