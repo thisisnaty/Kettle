@@ -11,8 +11,6 @@ export async function uploadImageAsync(imageUri) {
     type: `image/${fileType}`
   }
 
-  console.log(Config);
-  
   const options = {
     bucket: Config.AWS_BUCKET,
     region: Config.AWS_BUCKET_LOCATION,
