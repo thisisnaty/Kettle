@@ -75,7 +75,7 @@ export default class Main extends React.Component {
   }
 
   _manageEventAsync = async (json) => {
-    //console.log(json);
+    console.log(json);
     
     var path = FileSystem.documentDirectory + '/' + 
       json.Name.split(" ").join("-") + 
