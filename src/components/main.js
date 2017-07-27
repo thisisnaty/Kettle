@@ -1,31 +1,41 @@
 import React from 'react';
 import ImageSelect from './imageSelect';
 import EventDescription from './eventDescription';
-import { ActivityIndicator, 
-         Image, 
-         StyleSheet, 
-         View,
-         Linking } from 'react-native';
-import { LinearGradient, FileSystem } from 'expo';
-import { uploadImageAsync } from '../helpers/imageUploader'; 
-import { parseJsonToIcs } from '../helpers/icsParser';
+import Authentication from './authentication';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  View,
+  Linking
+} from 'react-native';
+import  { LinearGradient, FileSystem }  from  'expo';
+import {  uploadImageAsync } from '../helpers/imageUploader';
+import { parseJsonToIcs }  from '../helpers/icsParser';
 
 export default class Main extends React.Component {
   state = {
     imageUri: null,
     uploading: false,
-    uploaded: false
+    uploaded: false,
+    isLogin: false,
+    name: null,
+    access_token: null
   }
   render() {
     let renderResult = null;
     let renderBackground = null;
 
-    if (!this.state.uploading) {
-      if (this.state.uploaded) {
-        renderResult = <EventDescription imageUri={this.state.imageUri} startAgain={this._startAgain.bind(this)} />;
-      } else {
-        renderResult = <ImageSelect imageHandler={this._handleImagePicked.bind(this)}/>;
+    if (this.state.isLogin) {
+      if (!this.state.uploading) {
+        if (this.state.uploaded) {
+          renderResult = <EventDescription imageUri={this.state.imageUri} startAgain={this._startAgain.bind(this)} />;
+        } else {
+          renderResult = <ImageSelect name={this.state.name} imageHandler={this._handleImagePicked.bind(this)} />;
+        }
       }
+    } else {
+      renderResult = <Authentication updateState={this.setState.bind(this)} />;
     }
 
     return (
@@ -33,7 +43,7 @@ export default class Main extends React.Component {
         <LinearGradient
           colors={["rgb(30,87,153)", "rgb(32,124,202)", "rgb(125,185,232)"]}
           style={styles.container}>
-        {renderResult}
+          {renderResult}
         </LinearGradient>
       </View>
     );
@@ -41,28 +51,28 @@ export default class Main extends React.Component {
 
   _handleImagePicked = async (pickerResult) => {
     let uploadResponse, uploadResult;
-    
-    try {
-      this.setState({uploading: true});
 
-      if(!pickerResult.cancelled) {
-        this.setState({imageUri: pickerResult.uri, uploaded: true });
-        
+    try {
+      this.setState({ uploading: true });
+
+      if (!pickerResult.cancelled) {
+        this.setState({ imageUri: pickerResult.uri, uploaded: true });
+
         uploadImageAsync(pickerResult.uri).then((uploadResponse) => {
           return uploadResponse.json();
         }).then((jsonResponse) => {
-          this.setState({uploading: false});
+          this.setState({ uploading: false });
           return this._manageEventAsync(jsonResponse);
         });
       }
-    } catch(e) {
-      console.log({uploadResponse});
-      console.log({uploadResult});
-      console.log({e});
-      this.setState({imageUri: null, uploaded: false});
+    } catch (e) {
+      console.log({ uploadResponse });
+      console.log({ uploadResult });
+      console.log({ e });
+      this.setState({ imageUri: null, uploaded: false });
       alert("There was an error, please try again.")
     } finally {
-      this.setState({uploading: false});
+      this.setState({ uploading: false });
     }
   }
 
@@ -76,14 +86,14 @@ export default class Main extends React.Component {
 
   _manageEventAsync = async (json) => {
     console.log(json);
-    
-    var path = FileSystem.documentDirectory + '/' + 
-      json.Name.split(" ").join("-") + 
+
+    var path = FileSystem.documentDirectory + '/' +
+      json.Name.split(" ").join("-") +
       Math.random().toString(36).substr(2, 3) + '.ics';
-    
+
     return FileSystem.writeAsStringAsync(path, parseJsonToIcs(json))
       .then(() => {
-        //Linking.openURL('ical://' + path);
+        //Linking.openURL('mailto://garcia.doe@gmail.com' + path);
         //console.log(path);
       })
       .catch((err) => {

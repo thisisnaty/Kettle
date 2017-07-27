@@ -7,8 +7,10 @@
   "main": "node_modules/expo/AppEntry.js",
   "dependencies": {
     "expo": "^19.0.0",
+    "jwt-decode": "^2.2.0",
     "react": "16.0.0-alpha.12",
     "react-native": "https://github.com/expo/react-native/archive/sdk-19.0.0.tar.gz",
-    "react-native-aws3": "0.0.8"
+    "react-native-aws3": "0.0.8",
+    "react-native-ms-adal": "^0.3.1"
   }
 }
