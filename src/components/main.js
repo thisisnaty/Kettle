@@ -59,6 +59,7 @@ export default class Main extends React.Component {
         this.setState({ imageUri: pickerResult.uri, uploaded: true });
 
         uploadImageAsync(pickerResult.uri).then((uploadResponse) => {
+          console.log(uploadResponse);
           return uploadResponse.json();
         }).then((jsonResponse) => {
           this.setState({ uploading: false });

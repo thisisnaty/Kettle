@@ -23,14 +23,14 @@ export async function uploadImageAsync(imageUri) {
     if (response.status !== 201)
       throw new Error("Failed to upload image to S3");
 
-    let formData = new FormData();
-    formData.append('url', response.body.postResponse.location);
     let options = {
       method: 'POST',
-      body: formData,
+      body: JSON.stringify({
+          url: response.body.postResponse.location
+        }),
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
       },
     };
 
