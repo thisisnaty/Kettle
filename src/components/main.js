@@ -87,19 +87,28 @@ export default class Main extends React.Component {
   _manageEventAsync = async (json) => {
     console.log(json);
 
-    var path = FileSystem.documentDirectory + '/' +
-      json.Name.split(" ").join("-") +
-      Math.random().toString(36).substr(2, 3) + '.ics';
+    let formData = new FormData();
+    formData.append('subject', `${json.title} @ ${json.location}`);
+    formData.append('start', json.startDate);
+   /** {
+      "dateTime": json.,
+      "timeZone": "PT"
+    });**/
+    formData.append('end', json.endDate);
+    /**{
+      "dateTime": json.,
+      "timeZone": "PT"
+    });**/
+    formData.append('isAllDay', json.isAllDay);
 
-    return FileSystem.writeAsStringAsync(path, parseJsonToIcs(json))
-      .then(() => {
-        //Linking.openURL('mailto://garcia.doe@gmail.com' + path);
-        //console.log(path);
-      })
-      .catch((err) => {
-        console.log("Error on creating ics");
-        console.log(err);
-      });
+    return fetch(`https://graph.microsoft.com/beta/me/calendar/events`, {
+      method: "POST",
+      headers: {
+        'Authorization': `Bearer ${this.state.access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: formData
+    })
   }
 }
 
