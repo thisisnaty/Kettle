@@ -89,16 +89,14 @@ export default class Main extends React.Component {
 
     let formData = new FormData();
     formData.append('subject', `${json.title} @ ${json.location}`);
-    formData.append('start', json.startDate);
-   /** {
-      "dateTime": json.,
+    formData.append('start', {
+      "dateTime": json.startDate,
       "timeZone": "PT"
-    });**/
-    formData.append('end', json.endDate);
-    /**{
-      "dateTime": json.,
+    });
+    formData.append('end', {
+      "dateTime": json.endDate,
       "timeZone": "PT"
-    });**/
+    });
     formData.append('isAllDay', json.isAllDay);
 
     return fetch(`https://graph.microsoft.com/beta/me/calendar/events`, {
@@ -108,7 +106,7 @@ export default class Main extends React.Component {
         'Content-Type': 'application/json'
       },
       body: formData
-    })
+    });
   }
 }
 
